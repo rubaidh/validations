@@ -110,8 +110,49 @@ class ValidatesFullyQualifiedDomainNameTest < ActiveSupport::TestCase
     invalid_fully_qualified_domain_names.each do |invalid_fully_qualified_domain_name, reason|
       model = Model.new
       model.fully_qualified_domain_name = invalid_fully_qualified_domain_name
-      assert !model.valid?, "Hostname '#{invalid_fully_qualified_domain_name}' should not be valid: #{reason}"
+      assert !model.valid?, "Fully qualified domain name '#{invalid_fully_qualified_domain_name}' should not be valid: #{reason}"
       assert model.errors.on(:fully_qualified_domain_name)
+    end
+  end
+end
+
+class ValidatesEmailAddressTest < ActiveSupport::TestCase
+  class Model < DummyActiveRecordBase
+    attr_accessor :email_address
+    validates_email_address_format_of :email_address
+  end
+
+  test "the model can be instantiated" do
+    assert Model.new
+  end
+
+  test "the model correctly identifies some valid email addresses" do
+    valid_email_addresss = [
+      'mathie@example.com',
+      '#!/bin/sh@firedrake.org',
+      '"foo bar"@example.org',
+      'graeme.mathieson@acm.org',
+    ]
+
+    valid_email_addresss.each do |valid_email_address|
+      model = Model.new
+      model.email_address = valid_email_address
+      assert model.valid?, "Email address '#{valid_email_address}' should be valid"
+    end
+  end
+
+  test "the validation correctly identifies some invalid email addresses" do
+    invalid_email_addresss = [
+      'foo bar@example.org',
+      '.foo.bar@example.org',
+      '""@example.org',
+    ]
+
+    invalid_email_addresss.each do |invalid_email_address, reason|
+      model = Model.new
+      model.email_address = invalid_email_address
+      assert !model.valid?, "Email address '#{invalid_email_address}' should not be valid: #{reason}"
+      assert model.errors.on(:email_address)
     end
   end
 end
