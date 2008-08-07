@@ -143,9 +143,13 @@ class ValidatesEmailAddressTest < ActiveSupport::TestCase
 
   test "the validation correctly identifies some invalid email addresses" do
     invalid_email_addresss = [
-      'foo bar@example.org',
-      '.foo.bar@example.org',
-      '""@example.org',
+      ['@exmaple.org', "Must have a local part"],
+      ['graeme.mathieson@', "Must contain a fully qualified domain name"],
+      ['graeme@tullibardine', "Must contain a fully qualified domain name (not just a host name)"],
+      ['foo bar@example.org', "Can't contain spaces"],
+      ['.foo.bar@example.org', "Cannot start with a period"],
+      ['""@example.org', "Must have something inside the quotes"],
+      # FIXME ['foo..bar@exmapl.org', "Cannot contain two periods in a row in the local part"],
     ]
 
     invalid_email_addresss.each do |invalid_email_address, reason|
