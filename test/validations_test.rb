@@ -103,7 +103,8 @@ class ValidatesFullyQualifiedDomainNameTest < ActiveSupport::TestCase
   test "the validation correctly identifies some invalid fully qualified domain names" do
     invalid_fully_qualified_domain_names = [
       ["#{'f' * 64}.com", 'while the overall length is in bounds, one of the hostname components is too long'],
-      ["foo-.com",        'one of the domain components ends with a "-"']
+      ["foo-.com",        'one of the domain components ends with a "-"'],
+      ["info.",           'requires at least two hostname parts']
     ]
 
     invalid_fully_qualified_domain_names.each do |invalid_fully_qualified_domain_name, reason|
