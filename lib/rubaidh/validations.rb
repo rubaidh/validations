@@ -3,9 +3,11 @@ module Rubaidh
     module RegularExpressions
       module RegexStr
         Hostname = '[a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]'.freeze
+        FullyQualifiedDomainName = "#{Hostname}(\\.#{Hostname})+\\.?".freeze
       end
 
       Hostname = /\A#{RegexStr::Hostname}\Z/.freeze
+      FullyQualifiedDomainName = /\A#{RegexStr::FullyQualifiedDomainName}\Z/.freeze
     end
 
     def self.included(base)
@@ -19,6 +21,18 @@ module Rubaidh
         configuration = { :with => Rubaidh::Validations::RegularExpressions::Hostname }
         configuration.update(options)
         validates_format_of *(attr_names + [configuration])
+      end
+
+      def validates_fully_qualified_domain_name_format_of(*attr_names)
+        options = attr_names.extract_options!
+
+        format_configuration = { :with => Rubaidh::Validations::RegularExpressions::FullyQualifiedDomainName }
+        format_configuration.update(options)
+        validates_format_of *(attr_names + [format_configuration])
+
+        length_configuration = { :within => 5..255 }
+        length_configuration.update(options)
+        validates_length_of *(attr_names + [length_configuration])
       end
     end
   end
