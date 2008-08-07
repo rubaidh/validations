@@ -5,10 +5,10 @@ module Rubaidh
         Hostname = '[a-zA-Z0-9][a-zA-Z0-9-]{0,61}[a-zA-Z0-9]'.freeze
         FullyQualifiedDomainName = "#{Hostname}(\\.#{Hostname})+\\.?".freeze
 
-        EmailAddressLocalPartSpecialCharacters = Regexp.escape('!#$%&\'*+-/=?^_`{|}~')
-        EmailAddressLocalPartUnquoted = "[[:alnum:]#{EmailAddressLocalPartSpecialCharacters}][[:alnum:]#{EmailAddressLocalPartSpecialCharacters}\.]*"
-        EmailAddressLocalPartQuoted = '[\x00-\xFF]+'
-        EmailAddressLocalPart = "(#{EmailAddressLocalPartUnquoted}|\"#{EmailAddressLocalPartQuoted}\")"
+        EmailAddressLocalPartSpecialCharacters = Regexp.escape('!#$%&\'*+-/=?^_`{|}~').freeze
+        EmailAddressLocalPartUnquoted = "[[:alnum:]#{EmailAddressLocalPartSpecialCharacters}][[:alnum:]#{EmailAddressLocalPartSpecialCharacters}\.]*".freeze
+        EmailAddressLocalPartQuoted = '[\x00-\xFF]+'.freeze
+        EmailAddressLocalPart = "(#{EmailAddressLocalPartUnquoted}|\"#{EmailAddressLocalPartQuoted}\")".freeze
         EmailAddress = "#{EmailAddressLocalPart}@#{FullyQualifiedDomainName}".freeze
       end
 
