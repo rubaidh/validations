@@ -42,23 +42,27 @@ class ValidatesHostnameTest < ActiveSupport::TestCase
     valid_hostnames = [
       'foo',
       'bar',
-      'tc'
+      'foo-bar',
+      '1-2-3-4',
+      'tc',
+      't' * 63
     ]
 
     valid_hostnames.each do |valid_hostname|
       model = Model.new
       model.hostname = valid_hostname
-      assert model.valid?, "Hostname #{valid_hostname} should be valid"
+      assert model.valid?, "Hostname '#{valid_hostname}' should be valid"
     end
   end
 
   test "the validation correctly identifies some invalid hostnames" do
     invalid_hostnames = [
-      ['-foo', 'starts with a "-"'],
-      ['f', 'too short'],
-      ['f'*64, 'too long'],
-      ['f@b', 'contains an invalid character'],
-      ['f_ab', 'contains an invalid character'],
+      ['-foo',        'starts with a "-"'],
+      ['foo-',        'ends with a "-"'],
+      ['f',           'too short'],
+      ['f'*64,        'too long'],
+      ['f@b',         'contains an invalid character'],
+      ['f_ab',        'contains an invalid character'],
       ['example.com', 'contains an invalid character (a hostname is not a fqdn)']
     ]
 
